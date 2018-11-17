@@ -108,3 +108,9 @@ venv.bak/
 
 # video files
 *.mp4
+
+# config
+config*
+
+# Serverless directories
+.serverless
