@@ -105,3 +105,6 @@ venv.bak/
 
 # system files
 .DS_Store
+
+# video files
+*.mp4
