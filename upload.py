@@ -4,10 +4,17 @@ import click
 import boto3
 from botocore.exceptions import ClientError
 
+@click.group()
+def cli():
+    """Command group for Click"""
+    pass
+
+
+@cli.command('')
 @click.argument('path_name', type=click.Path(exists=True))
 @click.argument('bucket_name')
 @click.option('--profile', default=None, help='Specify the AWS profile to use as credentials.')
-def hello(path_name, bucket_name, **kwargs):
+def upload(path_name, bucket_name, **kwargs):
     """Upload <PATH> to <BUCKET_NAME>"""
     params = {k:v for k, v in kwargs.items() if v is not None}
     session = boto3.Session(**params)
@@ -22,3 +29,7 @@ def hello(path_name, bucket_name, **kwargs):
         print('Unable to upload file {0}. '.format(path_name) + str(err) + '\n')
 
     return
+
+
+if __name__ == '__main__':
+    cli()
