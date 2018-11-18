@@ -91,8 +91,7 @@ custom:
   videosBucketName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
   videosTableName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_table}
 
-  videosBucketArn: !Join [
-    ':',
+  videosBucketArn: !Join [':',
     [
       arn,
       aws,
@@ -103,8 +102,7 @@ custom:
     ]
   ]
 
-  rekognitionSNSTopicArn: !Join [
-    ':',
+  rekognitionSNSTopicArn: !Join [':',
     [
       arn,
       aws,
