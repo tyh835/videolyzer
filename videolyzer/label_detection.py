@@ -49,7 +49,7 @@ def put_labels_in_db(data, key, bucket):
 
     data['videoName'] = key
     data['videoBucket'] = bucket
-    data['videoMetaData'] = data['VideoMetaData']
+    data['videoMetadata'] = data['VideoMetadata']
     data['labels'] = data['Labels']
 
     del data['ResponseMetadata']
