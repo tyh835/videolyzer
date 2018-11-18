@@ -46,6 +46,7 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - suffix: .mp4
+
   handle-label-detection:
     handler: label_detection.handler
     events:
