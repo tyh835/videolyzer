@@ -7,7 +7,7 @@ from decimal import Decimal
 import boto3
 
 
-def handler(event):
+def handler(event, context):
     """Handles SNS message on Rekognition job completion"""
     for record in event['Records']:
         message = json.loads(record['Sns']['Message'])

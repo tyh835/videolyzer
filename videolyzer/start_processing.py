@@ -5,7 +5,7 @@ import os
 import boto3
 
 
-def handler(event):
+def handler(event, context):
     """Handles S3 events on video upload"""
     for record in event['Records']:
         bucket_name = record['s3']['bucket']['name']
