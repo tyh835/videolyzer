@@ -1,4 +1,6 @@
 import urllib
+import os
+
 import boto3
 
 def handler(event, context):
@@ -19,6 +21,10 @@ def start_label_detection(bucket_name, key):
                 'Bucket': bucket_name,
                 'Name': key
             }
+        },
+        NotificationChannel={
+            'SNSTopicArn': os.environ['REKOGNITION_SNS_TOPIC_ARN'],
+            'RoleArn': os.environ['REKOGNITION_ROLE_ARN']
         }
     )
 
