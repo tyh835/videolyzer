@@ -47,11 +47,15 @@ def put_labels_in_db(data, key, bucket):
     table_name = os.environ['DYNAMODB_TABLE_NAME']
     videos_table = dynamodb.Table(table_name)
 
-    del data['ResponseMetadata']
-    del data['JobStatus']
-
     data['videoName'] = key
     data['videoBucket'] = bucket
+    data['videoMetaData'] = data['VideoMetaData']
+    data['labels'] = data['Labels']
+
+    del data['ResponseMetadata']
+    del data['JobStatus']
+    del data['VideoMetaData']
+    del data['Labels']
 
     data = make_item(data)
 
