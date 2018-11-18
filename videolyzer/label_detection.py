@@ -1,8 +1,12 @@
+"""Lambda function to process completed Rekognition jobs"""
+
 import json
+import os
 import boto3
 
 
-def handler(event, context):
+def handler(event):
+    """Handles SNS message on Rekognition job completion"""
     for record in event['Records']:
         message = json.loads(record['Sns']['Message'])
         job_id = message['JobId']
@@ -17,6 +21,7 @@ def handler(event, context):
 
 
 def get_video_labels(job_id):
+    """Fetches video labels from Rekognition"""
     rekognition = boto3.client('rekognition')
 
     response = rekognition.get_label_detection(JobId=job_id)
@@ -35,4 +40,31 @@ def get_video_labels(job_id):
 
 
 def put_labels_in_db(data, key, bucket):
-    return
+    """Puts label data into DynamoDB"""
+    dynamodb = boto3.resource('dynamodb')
+    table_name = os.environ['DYNAMODB_TABLE_NAME']
+    videos_table = dynamodb.Table(table_name)
+
+    del data['ResponseMetadata']
+    del data['JobStatus']
+
+    data['videoName'] = key
+    data['videoBucket'] = bucket
+
+    data = make_item(data)
+
+    videos_table.put_item(Item=data)
+
+
+def make_item(data):
+    """Preprocess data for DynamoDB insertion"""
+    if isinstance(data, dict):
+        return {k: make_item(v) for k, v in data.items()}
+
+    if isinstance(data, list):
+        return [make_item(v) for v in data]
+
+    if isinstance(data, float):
+        return str(data)
+
+    return data
