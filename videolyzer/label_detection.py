@@ -57,7 +57,7 @@ def put_labels_in_db(data, key, bucket):
 
 
 def make_item(data):
-    """Preprocess data for DynamoDB insertion"""
+    """Convert floats to str to prepare for DynamoDB insertion"""
     if isinstance(data, dict):
         return {k: make_item(v) for k, v in data.items()}
 
