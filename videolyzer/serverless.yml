@@ -20,10 +20,22 @@ provider:
           - ''
           - - ${self:custom.videosBucketArn}
             - '/*'
+    - Effect: "Allow"
+      Action:
+        - iam:GetRole
+        - iam:PassRole
+      Resource:
+        Fn::GetAtt:
+          - RekognitionSNSPublishRole
+          - Arn
 
   environment:
     REKOGNITION_SNS_TOPIC_ARN: ${self:custom.rekognitionSNSTopicArn}
-    REKOGNITION_ROLE_ARN: ''
+    REKOGNITION_ROLE_ARN:
+      Fn::GetAtt:
+        - RekognitionSNSPublishRole
+        - Arn
+
 
 functions:
   start-video-processing:
