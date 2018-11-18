@@ -28,14 +28,21 @@ provider:
         Fn::GetAtt:
           - RekognitionSNSPublishRole
           - Arn
+    - Effect: "Allow"
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        Fn::GetAtt:
+          - VideosTable
+          - Arn
 
   environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.videosTableName}
     REKOGNITION_SNS_TOPIC_ARN: ${self:custom.rekognitionSNSTopicArn}
     REKOGNITION_ROLE_ARN:
       Fn::GetAtt:
         - RekognitionSNSPublishRole
         - Arn
-
 
 functions:
   start-video-processing:
@@ -46,15 +53,29 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - suffix: .mp4
-
   handle-label-detection:
     handler: label_detection.handler
     events:
       - sns: LabelDetectionTopic
 
-
 resources:
   Resources:
+    VideosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: videoName
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: videoName
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.videosTableName}
+
     RekognitionSNSPublishRole:
       Type: AWS::IAM::Role
       Properties:
@@ -77,8 +98,10 @@ resources:
                     - sns:Publish
                   Resource: ${self:custom.rekognitionSNSTopicArn}
 
-
 custom:
+  videosBucketName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
+  videosTableName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_table}
+
   videosBucketArn:
     Fn::Join:
       - ':'
@@ -98,6 +121,3 @@ custom:
         - Ref: AWS::Region
         - Ref: AWS::AccountId
         - LabelDetectionTopic
-
-  videosBucketName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
-  videosTableName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_table)}

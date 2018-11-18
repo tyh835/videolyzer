@@ -1,7 +1,7 @@
 import urllib
 import os
-
 import boto3
+
 
 def handler(event, context):
     for record in event['Records']:
