@@ -7,6 +7,20 @@ provider:
   profile: ${file(../config.${self:provider.stage}.json):videolyzer.profile}
   region: us-west-2
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - rekognition:*
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - s3:GetObject
+      Resource:
+        - Fn::Join:
+          - ''
+          - - ${self:custom.videosBucketArn}
+            - '/*'
+
 functions:
   start-processing-video:
     handler: handler.start_processing_video
@@ -16,3 +30,14 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - suffix: .mp4
+
+custom:
+  videosBucketArn:
+    Fn::Join:
+      - ':'
+      - - arn
+        - aws
+        - s3
+        - ''
+        - ''
+        - ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
