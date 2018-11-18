@@ -1,6 +1,6 @@
 {
+  "profile": "",
   "videolyzer": {
-    "profile": "",
     "videos_bucket": "",
     "videos_table": ""
   }

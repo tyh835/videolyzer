@@ -4,7 +4,7 @@ provider:
   name: aws
   stage: dev
   runtime: python3.6
-  profile: ${file(../config.${self:provider.stage}.json):videolyzer.profile}
+  profile: ${file(../config.${self:provider.stage}.json):profile}
   region: us-west-2
 
   iamRoleStatements:
@@ -42,7 +42,7 @@ functions:
     handler: start_processing.handler
     events:
       - s3:
-          bucket: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
+          bucket: ${self:custom.videosBucketName}
           event: s3:ObjectCreated:*
           rules:
             - suffix: .mp4
@@ -87,7 +87,7 @@ custom:
         - s3
         - ''
         - ''
-        - ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
+        - ${self:custom.videosBucketName}
 
   rekognitionSNSTopicArn:
     Fn::Join:
@@ -98,3 +98,6 @@ custom:
         - Ref: AWS::Region
         - Ref: AWS::AccountId
         - LabelDetectionTopic
+
+  videosBucketName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
+  videosTableName: ${file(../config.${self:provider.stage}.json):videolyzer.videos_table)}
