@@ -2,6 +2,8 @@
 
 import json
 import os
+from decimal import Decimal
+
 import boto3
 
 
@@ -57,7 +59,7 @@ def put_labels_in_db(data, key, bucket):
 
 
 def make_item(data):
-    """Convert floats to str to prepare for DynamoDB insertion"""
+    """Convert floats to Decimal for DynamoDB"""
     if isinstance(data, dict):
         return {k: make_item(v) for k, v in data.items()}
 
@@ -65,6 +67,6 @@ def make_item(data):
         return [make_item(v) for v in data]
 
     if isinstance(data, float):
-        return str(data)
+        return Decimal(str(data))
 
     return data
