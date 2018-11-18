@@ -54,7 +54,7 @@ def put_labels_in_db(data, key, bucket):
 
     del data['ResponseMetadata']
     del data['JobStatus']
-    del data['VideoMetaData']
+    del data['VideoMetadata']
     del data['Labels']
 
     data = make_item(data)
