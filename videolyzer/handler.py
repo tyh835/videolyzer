@@ -12,8 +12,8 @@ def start_processing_video(event, context):
 
 
 def start_label_detection(bucket_name, key):
-    rekcognition = boto3.client('rekcognition')
-    response = rekcognition.start_label_detection(
+    rekognition = boto3.client('rekognition')
+    response = rekognition.start_label_detection(
         Video={
             'S3Object': {
                 'Bucket': bucket_name,
