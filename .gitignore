@@ -110,7 +110,9 @@ venv.bak/
 *.mp4
 
 # config
-config*
+config.dev.json
+config.test.json
+config.prod.json
 
 # Serverless directories
 .serverless
