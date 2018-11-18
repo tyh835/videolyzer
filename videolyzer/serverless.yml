@@ -22,14 +22,18 @@ provider:
             - '/*'
 
 functions:
-  start-processing-video:
-    handler: handler.start_processing_video
+  start-video-processing:
+    handler: start_processing.handler
     events:
       - s3:
           bucket: ${file(../config.${self:provider.stage}.json):videolyzer.videos_bucket}
           event: s3:ObjectCreated:*
           rules:
             - suffix: .mp4
+  handle-label-detection:
+    handler: label_detection.handler
+    events:
+      - sns: LabelDetectionTopic
 
 custom:
   videosBucketArn:
