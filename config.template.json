@@ -1,5 +1,6 @@
 {
   "profile": "",
+  "deployment_bucket": "",
   "videolyzer": {
     "videos_bucket": "",
     "videos_table": ""
