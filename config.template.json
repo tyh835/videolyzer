@@ -1,8 +1,8 @@
 {
-  "profile": "",
-  "deployment_bucket": "",
+  "profile": "AWS_PROFILE_HERE",
+  "deployment_bucket": "SERVERLESS_DEPLOYMENT_BUCKET",
   "videolyzer": {
-    "videos_bucket": "",
-    "videos_table": ""
+    "videos_bucket": "UPLOAD_BUCKET",
+    "videos_table": "ANALYSIS_OUTPUT_DYNAMODB"
   }
 }
